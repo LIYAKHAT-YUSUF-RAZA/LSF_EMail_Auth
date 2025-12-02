@@ -17,7 +17,23 @@ const allowedOrigins = ['http://localhost:5173', 'https://lsf-e-mail-auth.vercel
 
 app.use(express.json()) // to parse JSON bodies or all the requests will be passes using json
 app.use(cookieParser()) // to parse cookies from the request headers
-app.use(cors({ origin: allowedOrigins, credentials: true })) //  credentails: true allows cookies to be sent from the response (frontend to the backend)
+
+// Enhanced CORS configuration for cross-domain cookies
+app.use(cors({ 
+    origin: allowedOrigins, 
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}))
+
+// Add headers for credentials
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.header('Pragma', 'no-cache');
+    res.header('Expires', '0');
+    next();
+});
 
 // API Endpoints
 app.get('/',(req, res) => res.send("API woking fine"))

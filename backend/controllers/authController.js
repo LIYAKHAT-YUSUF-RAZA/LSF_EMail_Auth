@@ -31,6 +31,7 @@ export const register = async (req, res) => {
             httpOnly: true, // cookie is not accessible from client side
             secure: true, // Always true for production (works with HTTPS)
             sameSite: 'none', // Allow cross-site cookies
+            path: '/', // Cookie available to all paths
             maxAge: 7 * 24 * 60 * 60 * 1000 // cookie will expire in 7 days
         });
 
@@ -44,7 +45,8 @@ export const register = async (req, res) => {
 
         await transporter.sendMail(mailOptions); // send the email using nodemailer transporter
 
-        return res.json({ success: true });
+        // Return token so frontend can store it
+        return res.json({ success: true, token });
 
     } catch (error) {
         res.json({ success: false, message: 'error in register in authController.js ' + error.message })
@@ -77,10 +79,12 @@ export const login = async (req, res) => {
             httpOnly: true, // cookie is not accessible from client side
             secure: true, // Always true for production (works with HTTPS)
             sameSite: 'none', // Allow cross-site cookies
+            path: '/', // Cookie available to all paths
             maxAge: 7 * 24 * 60 * 60 * 1000 // cookie will expire in 7 days
         });
 
-        return res.json({ success: true }); // return a success response with the user details
+        // Return token so frontend can store it
+        return res.json({ success: true, token });
 
     } catch (error) {
         res.json({ success: false, message: 'error in login in authController.js ' + error.message });
@@ -93,9 +97,10 @@ export const logout = async (req, res) => {
             httpOnly: true, // cookie is not accessible from client side
             secure: true, // Always true for production
             sameSite: 'none', // Allow cross-site cookies
+            path: '/', // Must match the path used when setting
         });
 
-        return res.json({ success: true, message: "Logged OUt" })
+        return res.json({ success: true, message: "Logged Out" })
 
     } catch (error) {
         return res.json({ success: false, message: 'error in logout in authController.js ' + error.message });

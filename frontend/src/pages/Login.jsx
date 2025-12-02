@@ -77,14 +77,25 @@ const Login = () => {
                 return
             }
 
+            // Set axios to send credentials with cross-origin requests
             axios.defaults.withCredentials = true
 
             if (state === 'Sign Up') {
                 const { data } = await axios.post(backendUrl + '/api/auth/register',
-                    { name, email, password })
+                    { name, email, password },
+                    { withCredentials: true }
+                )
+                console.log('Register response:', data);
 
                 if (data.success) {
                     setIsLoggedin(true)
+                    // Store the JWT token returned from backend
+                    if (data.token) {
+                        console.log('Storing token in localStorage:', data.token);
+                        localStorage.setItem('authToken', data.token)
+                    } else {
+                        console.warn('No token in register response');
+                    }
                     getUserData()
                     navigate('/')
                 } else {
@@ -92,10 +103,20 @@ const Login = () => {
                 }
             } else {
                 const { data } = await axios.post(backendUrl + '/api/auth/login',
-                    { email, password })
+                    { email, password },
+                    { withCredentials: true }
+                )
+                console.log('Login response:', data);
 
                 if (data.success) {
                     setIsLoggedin(true)
+                    // Store the JWT token returned from backend
+                    if (data.token) {
+                        console.log('Storing token in localStorage:', data.token);
+                        localStorage.setItem('authToken', data.token)
+                    } else {
+                        console.warn('No token in login response');
+                    }
                     getUserData()
                     navigate('/')
                 } else {

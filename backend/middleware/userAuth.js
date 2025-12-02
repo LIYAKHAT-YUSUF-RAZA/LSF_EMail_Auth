@@ -1,15 +1,27 @@
 import jwt from 'jsonwebtoken'
 
 const userAuth = async (req, res, next) => {
-    const {token} = req.cookies; // trying to find the token that is stored in the cookie
+    let token = null;
+    
+    // Try to get token from cookies first
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    
+    // If no cookie token, try Authorization header
+    if (!token && req.headers.authorization) {
+        const authHeader = req.headers.authorization;
+        if (authHeader.startsWith('Bearer ')) {
+            token = authHeader.slice(7); // Remove 'Bearer ' prefix
+        }
+    }
 
     if(!token) {
         return res.json({success: false, message: 'Not Authorized. Login Again'})
     }
 
     try {
-        
-        const tokenDecode = jwt.verify(token, process.env.JWT_SECRET); // verify the token using jwt.verify method and storing in tokenDecode
+        const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
 
         if(tokenDecode.id){
             req.userId = tokenDecode.id
@@ -17,12 +29,11 @@ const userAuth = async (req, res, next) => {
             return res.json({success: false, message: 'Not Authorized. Login Again'});
         }
 
-        next(); // if the token is valid, call the next middleware or route handler or executing controller function
+        next();
 
     } catch (error) {
         res.json({success: false, message: '--error in userAuth middleware' + error.message});
     }
 }
 
-export default userAuth; // export the userAuth middleware to use in the routes
-// This middleware will be used to protect the routes that require authentication
+export default userAuth;

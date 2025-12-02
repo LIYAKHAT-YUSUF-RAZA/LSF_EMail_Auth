@@ -37,6 +37,9 @@ const Navbar = () => {
       const {data} = await axios.post(backendUrl + '/api/auth/logout')
       data.success && setIsLoggedin(false)
       data.success && setUserData(false)
+      // Clear both old and new token keys from localStorage
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('userToken')
       setShowDropdown(false)
       navigate('/login')
     } catch (error) {
