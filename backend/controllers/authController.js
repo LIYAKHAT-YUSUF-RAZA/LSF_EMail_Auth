@@ -29,8 +29,8 @@ export const register = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true, // cookie is not accessible from client side
-            secure: process.env.NODE_ENV === 'production',// false because NODE_ENV == development // cookie is only sent over HTTPS in production
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // cookie is sent with cross-site requests in production, otherwise it is sent with same-site requests
+            secure: true, // Always true for production (works with HTTPS)
+            sameSite: 'none', // Allow cross-site cookies
             maxAge: 7 * 24 * 60 * 60 * 1000 // cookie will expire in 7 days
         });
 
@@ -75,8 +75,8 @@ export const login = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true, // cookie is not accessible from client side
-            secure: process.env.NODE_ENV === 'production', // cookie is only sent over HTTPS in production
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // cookie is sent with cross-site requests in production, otherwise it is sent with same-site requests
+            secure: true, // Always true for production (works with HTTPS)
+            sameSite: 'none', // Allow cross-site cookies
             maxAge: 7 * 24 * 60 * 60 * 1000 // cookie will expire in 7 days
         });
 
@@ -91,8 +91,8 @@ export const logout = async (req, res) => {
     try {
         res.clearCookie('token', {
             httpOnly: true, // cookie is not accessible from client side
-            secure: process.env.NODE_ENV === 'production', // cookie is only sent over HTTPS in production
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // cookie is sent with cross-site requests in production, otherwise it is sent with same-site requests
+            secure: true, // Always true for production
+            sameSite: 'none', // Allow cross-site cookies
         });
 
         return res.json({ success: true, message: "Logged OUt" })

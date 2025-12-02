@@ -13,7 +13,7 @@ app.use(express.json()) // to parse JSON bodies
 const port = process.env.PORT || 4000 // set the port to 4000 or the port from environment variables
 connectDB(); // connect to the database
 
-const allowedOrigins = ['http://localhost:5173']  // can add all the frontend URL where you want to use this backend server and we can add multiple urls by separating them with ,
+const allowedOrigins = ['http://localhost:5173', 'https://lsf-e-mail-auth.vercel.app']  // can add all the frontend URL where you want to use this backend server and we can add multiple urls by separating them with ,
 
 app.use(express.json()) // to parse JSON bodies or all the requests will be passes using json
 app.use(cookieParser()) // to parse cookies from the request headers
