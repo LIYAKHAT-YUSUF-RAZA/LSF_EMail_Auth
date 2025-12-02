@@ -296,4 +296,91 @@ Total: 15 endpoints
 
 ## Security
 
+Things I did to keep it secure:
+
+- Passwords are hashed (using bcryptjs with 10 salt rounds)
+- JWT tokens expire after 7 days
+- Tokens stored in secure HTTP-only cookies (can't be stolen by JavaScript)
+- CORS only allows our frontend
+- Frontend validates input before sending
+- Backend validates input again
+- Email verified before account works
+- Password reset uses OTP codes
+
+---
+
+## How to Make it Bigger/Better
+
+### For Staging
+- Add database indexes (faster queries)
+- Add rate limiting (stop spam)
+- Add logging (see what's happening)
+- Test everything
+
+### For Production
+- Use MongoDB Atlas
+- Deploy on cloud (AWS, GCP, etc)
+- Use a CDN for frontend
+- Enable HTTPS (SSL certificate)
+- Set up automatic deployment
+
+### For Enterprise
+- Add load balancers
+- Use Redis for caching
+- Use Docker/Kubernetes
+- Add monitoring tools
+- Add error tracking
+
+---
+
+## What It Does
+
+1. User registers with email and password
+2. Gets email with OTP code
+3. Verifies account with OTP
+4. Can now login
+5. After login, goes to dashboard
+6. Dashboard shows tasks and statistics
+7. Can create, edit, delete tasks
+8. Can filter tasks by status or priority
+9. Can view profile and change password
+
+---
+
+## Some Issues I Ran Into
+
+**MongoDB Connection Failed**
+- Check your connection string
+- Make sure IP is whitelisted in MongoDB Atlas
+- Check username and password
+
+**Emails Not Sending**
+- Gmail needs app-specific password
+- Check SENDER_EMAIL and SENDER_PASSWORD in .env
+- Make sure you enabled Gmail app passwords
+
+**CORS Errors**
+- Check that CORS_ORIGIN matches your frontend URL
+- Should be http://localhost:5173 for development
+
+**Token Issues**
+- Check if cookies are enabled
+- Clear browser cookies and try again
+
+---
+
+## Notes About the Code
+
+- I used Context API for state management instead of Redux (simpler)
+- Tailwind CSS for styling (no CSS files needed)
+- Kept code simple and readable
+- Used async/await instead of promises
+- Error handling on all endpoints
+- Input validation everywhere
+
+---
+
+**Last Updated**: December 2, 2025  
+**Version**: 1.0.0  
+**Status**: Works and tested
 
